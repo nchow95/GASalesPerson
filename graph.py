@@ -12,22 +12,26 @@ class Node:
     def __str__(self):
         return "Name: {}\n Connections: {}\n Weights{}\n"\
             .format(self.name, self.connections, self.weights)
+
     def next_node(self, past_nodes):
-        rand_index = random.randint(0, self.edges)
+        rand_index = random.randint(0, self.edges-1)
+        flag = True
         while True:
             if self.connections[rand_index] in past_nodes:
                 if (rand_index + 1) < self.edges:
                     rand_index += 1
-                elif (rand_index - 1) > 0:
-                    rand_index -= 1
+                else:
+                    if flag:
+                        rand_index = 0
+                        flag = False
+                    else:
+                        return [None, None]
             else:
-                return self.connections[rand_index]
-
+                return [self.connections[rand_index], self.weights[rand_index]]
+                break
 
 class Graph:
     def __init__(self, filename):
-        self.curr_node = None
-        self.past_node = None
         self.nodes = []
         self.parsefile(filename)
 
@@ -44,3 +48,10 @@ class Graph:
                 connections.append(connection)
                 weights.append(int(weight))
             self.nodes.append(Node(name, connections, weights))
+
+    def get_index_by_name(self, name):
+        index = 0
+        for node in self.nodes:
+            if node.name == name:
+                return index
+            index += 1
