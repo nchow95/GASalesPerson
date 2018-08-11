@@ -43,10 +43,15 @@ class Graph:
             weights = []
             [name, connection_str] = line.split(" = ")
             connect_items = connection_str[2:-3].split("), (")
-            for item in connect_items:
-                [connection, weight] = item.split(", ")
+            if len(connect_items) == 1:
+                [connection, weight] = connection_str[2:-3].split(", ")
                 connections.append(connection)
                 weights.append(int(weight))
+            else:
+                for item in connect_items:
+                    [connection, weight] = item.split(", ")
+                    connections.append(connection)
+                    weights.append(int(weight))
             self.nodes.append(Node(name, connections, weights))
 
     def get_index_by_name(self, name):
